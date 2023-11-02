@@ -37,19 +37,11 @@ class RegisteredUserController extends Controller
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-        $role = Role::where('name', 'janitor')->first();
-       if($role) {
-           $id = $role->id;
-
-       } else {
-           $id = null;
-       }
-        error_log($id);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => $id ?: 1,
+            'permissions' => 1,
         ]);
 
         event(new Registered($user));

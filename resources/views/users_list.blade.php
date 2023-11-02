@@ -17,7 +17,7 @@
                     <tr>
                         <td>{{$user}}</td>
                         <td>{{$user['email']}}</td>
-                        <td>{{$user['role'] ? $user['role']['name'] : "None"}}</td>
+                        <td>{{ (int)$user['permissions'] == RBAC::Admin->value ? "Administratorius" : ( $user['permissions'] > 1 ? "Redaktorius" : "Skaitytojas" )}} {{$user['permissions']}} </td>
                     </tr>
                 @endforeach
                 </tbody>
