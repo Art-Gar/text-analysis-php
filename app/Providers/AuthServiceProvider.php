@@ -24,7 +24,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('admin',function($user){
-            if($user->role->permissions == 0x7FFFFFFF) {
+            if($user->permissions == 0x7FFFFFFF) {
                 return true;
             }
             return false;

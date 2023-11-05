@@ -15,9 +15,9 @@
                 <tbody style="font-size: 12px">
                 @foreach($users as $user)
                     <tr>
-                        <td>{{$user}}</td>
+                        <td>{{$user['name']}}</td>
                         <td>{{$user['email']}}</td>
-                        <td>{{ (int)$user['permissions'] == RBAC::Admin->value ? "Administratorius" : ( $user['permissions'] > 1 ? "Redaktorius" : "Skaitytojas" )}} {{$user['permissions']}} </td>
+                        <td>{{ (int)$user['permissions'] == RBAC::Admin->value ? "Administratorius" : ( $user['permissions'] > 1 ? "Redaktorius" : "Skaitytojas" )}} </td>
                     </tr>
                 @endforeach
                 </tbody>

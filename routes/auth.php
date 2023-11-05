@@ -61,23 +61,23 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
-    Route::get('/zodziai', [WordController::class, 'getAll'] )->name('zodziai');
-    Route::get('zodziai.getWords', [WordController::class, 'getWords'] )->name('zodziai.getWords');
-    Route::get('zodziai.search', [WordController::class, 'searchWords'] )->name('zodziai.search');
-    Route::get('/leksemos', [LexemeController::class, 'getAll'] );
-    Route::get('leksemos.getLexemes', [LexemeController::class, 'getLexemes'] ) ->name('leksemos.getLexemes');
-    Route::get('leksemos.search', [LexemeController::class, 'searchLexemes'] )->name('leksemos.search');
-    Route::get('/', [ReadingController::class, 'getAll']);
-    Route::post('/', [ReadingController::class, 'searchScope']);
+//    Route::get('/zodziai', [WordController::class, 'getAll'] )->name('zodziai');
+//    Route::get('zodziai.getWords', [WordController::class, 'getWords'] )->name('zodziai.getWords');
+//    Route::get('zodziai.search', [WordController::class, 'searchWords'] )->name('zodziai.search');
+//    Route::get('/leksemos', [LexemeController::class, 'getAll'] );
+//    Route::get('leksemos.getLexemes', [LexemeController::class, 'getLexemes'] ) ->name('leksemos.getLexemes');
+//    Route::get('leksemos.search', [LexemeController::class, 'searchLexemes'] )->name('leksemos.search');
+//    Route::get('/', [ReadingController::class, 'getAll']);
+//    Route::post('/', [ReadingController::class, 'searchScope']);
 
-    Route::get('/skaitymas2', function () {
-        $lines = kn_tekstas_eil::all();
-        $grouped= $lines->groupBy('puslapis');
-        return view('skaitymasTemp', [
-            'heading' => 'zodziai',
-            'lines' => $grouped->all()
-        ]);
-    });
-    Route::get('/users', [UserController::class, 'getUsers']) -> name('users.getUsers');
-    Route::delete('/users', [UserController::class, 'deleteUser']) -> name('users.deleteUser');
+//    Route::get('/skaitymas2', function () {
+//        $lines = kn_tekstas_eil::all();
+//        $grouped= $lines->groupBy('puslapis');
+//        return view('skaitymasTemp', [
+//            'heading' => 'zodziai',
+//            'lines' => $grouped->all()
+//        ]);
+//    });
+//    Route::get('/users', [UserController::class, 'getUsers']) -> name('users.getUsers');
+//    Route::delete('/users', [UserController::class, 'deleteUser']) -> name('users.deleteUser');
 });
