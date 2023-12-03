@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\WordController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('users/{id}', [UserController::class, 'findById']);
+Route::patch('users/{id}/permissions', [UserController::class, 'updateUserPermissions'])->name('users.id.updatePermissions');
+Route::get('/words', [WordController::class, 'getWordData'])->name('api.words')->can('Admin');

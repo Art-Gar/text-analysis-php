@@ -9,4 +9,8 @@ class kaitymas extends Model
 {
     protected  $table = "kaitymas";
     use HasFactory;
+    protected $fillable = [
+        'id',
+        'kaitymas',
+    ];
 }

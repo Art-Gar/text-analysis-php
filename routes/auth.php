@@ -78,6 +78,6 @@ Route::middleware('auth')->group(function () {
 //            'lines' => $grouped->all()
 //        ]);
 //    });
-//    Route::get('/users', [UserController::class, 'getUsers']) -> name('users.getUsers');
+    // Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->middleware(['auth', 'verified'])->name('users');
 //    Route::delete('/users', [UserController::class, 'deleteUser']) -> name('users.deleteUser');
 });

@@ -26,7 +26,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/zodziai">zodziai <span class="sr-only">{{ Request::is('/zodziai') ? '(dabartinis)' : '' }}</span></a>
             </li>
-            @can('admin')
+            @can('Admin')
             <li class="nav-item active">
                 <a class="nav-link" href="/users">vartotojai <span class="sr-only">{{ Request::is('/users') ? '(dabartinis)' : '' }}</span></a>
             </li>

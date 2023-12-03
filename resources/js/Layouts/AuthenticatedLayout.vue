@@ -29,11 +29,20 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <NavLink  :href="route('home')" :active="route().current('home')">
+                                    Pagrindinis
+                                </NavLink>
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
                                 <NavLink v-if="$page.props.auth.user.permissions>=2147483647" :href="route('users')" :active="route().current('users')">
                                     Vartotojai
+                                </NavLink>
+                                <NavLink v-if="$page.props.auth.user.permissions>=2147483647" :href="route('lexemes')" :active="route().current('lexemes')">
+                                    Leksemos
+                                </NavLink>
+                                <NavLink v-if="$page.props.auth.user.permissions>=2147483647" :href="route('words')" :active="route().current('words')">
+                                    Žodžiai
                                 </NavLink>
                             </div>
                         </div>

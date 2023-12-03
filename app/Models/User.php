@@ -4,13 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Database\Query\Builder;
+/**
+* @mixin Builder
+*/
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -50,8 +51,24 @@ class User extends Authenticatable
 //    {
 //        return $this->hasOne(Role::class, 'id', 'role_id');
 //    }
-    public static function getAll(): Collection
+    public function getAll(): Collection
     {
-        return DB::table('users')->get();
+        return User::select(['id','name','email','permissions'])->get();
+    }
+    public static function findById(int $id): ?User
+    {
+        $user = User::select(['id','name','email','permissions'])->where('id', $id)->first();
+        return $user;
+    }
+    public static function updateUserPermissions(int $id, int $permissions)
+    {
+        User::where('id', $id)->update(['permissions' => $permissions]);
+    }
+    public static function getUsers(string $search = null) {
+        $query = self::query();
+        if($search && $search != '') {
+            $query->whereRaw('LOWER(user.name) LIKE ?', '%'.$search.'%')->orWhereRaw('LOWER(user.email) LIKE ?', '%'.$search.'%');
+        }
+        return $query->get();
     }
 }
