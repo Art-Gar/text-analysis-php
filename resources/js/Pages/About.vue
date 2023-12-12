@@ -23,13 +23,17 @@ defineProps({
     <Head title="Welcome" />
     <MainLayout>
         <div
-            class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white"
+            class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100   selection:bg-red-500 selection:text-white"
         >
     
             <div class="max-w-10xl mx-auto p-6 lg:p-8">
     
                 <div class="mt-20" >
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus justo sem, eleifend quis dolor sit amet, fermentum tincidunt risus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam nec eleifend ligula. Quisque porttitor luctus libero, et auctor mauris sagittis id. Morbi sit amet pretium turpis. Donec laoreet vitae quam quis vehicula. In ut vulputate urna. Etiam sed augue feugiat, ultrices nisl sed, posuere sapien. Suspendisse potenti. Sed convallis, erat ut placerat tempus, tortor libero semper tortor, condimentum suscipit lorem nisl et orci. Pellentesque congue augue vel magna auctor, id tempus sem hendrerit. Fusce ultricies, est et ullamcorper luctus, massa risus tristique elit, vitae efficitur mauris eros sed erat. Fusce egestas ante velit, a lobortis neque aliquam id. </p>
+                    <p>„Knyga nobažnystės krikščioniškos“ – ryškiausias lietuviškos kalvinistinės literatūros istorinis akcentas. Knygos rengėjai – Steponas Jaugelis Telega, Samuelis Tomaševskis, Samuelis Minvydas, Jonas Božimovskis. Leidinį sudaro penkios dalys: „Psalmynas su giesmėmis“, „Sekmadienių evangelijos“, „Pasakojimai apie Jėzaus kančią ir mirtį“, „Maldos krikščioniškos“ ir „Katekizmas mažas arba trumpas pamokslas tikėjimo krikščioniško“. „Knygos nobažnystės krikščioniškos“ kūriniai yra vidurinio rašomosios kalbos varianto pavyzdžiai, parašyti vakarų aukštaičių šiauliškių tarmės pagrindu. Turtinga yra knygos leksika, paremta liaudies kalba, bet gausiai papildyta naujadarais.
+<br>
+Didžiausios XVII a. lietuviškos knygos faksimilinis leidinys parengtas pagal vienintelį šiuo metu žinomą pirmojo leidimo egzempliorių, saugomą Švedijoje, Upsalos universiteto bibliotekoje.
+<br>
+Šio veikalo leidimas parankus ir moksliniam tekstų tyrimui, ir lituanistinių studijų gilinimui universitetuose. Numatyta, kad faksimilinis leidimas taps tolesnių kritinių atskirų šio veikalo dalių ir jų šaltinių rengimų ir leidimų pradžia. </p>
                 </div>
             </div>
         </div>

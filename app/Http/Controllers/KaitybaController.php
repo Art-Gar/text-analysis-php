@@ -10,9 +10,9 @@ class KaitybaController
 {
     public function getAll(): Response {
         {
-            $lexesmes = kn_leksemos::getAllLexemesJoined();
+            $lexesmes = kn_leksemos::getAllLexemes();
             return Inertia::render('Lexemes/Index', [
-                'lexemes' => kn_leksemos::getAllLexemesJoined(),
+                'lexemes' => kn_leksemos::getAllLexemes(),
             ]);
         }
     }

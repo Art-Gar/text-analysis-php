@@ -18,6 +18,8 @@ use App\Http\Controllers\WordController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('users/{id}', [UserController::class, 'findById']);
-Route::patch('users/{id}/permissions', [UserController::class, 'updateUserPermissions'])->name('users.id.updatePermissions');
-Route::get('/words', [WordController::class, 'getWordData'])->name('api.words')->can('Admin');
+Route::middleware(['web'])->group(function () {
+    Route::get('users/{id}', [UserController::class, 'findById']);
+    Route::patch('users/{id}/permissions', [UserController::class, 'updateUserPermissions'])->middleware('auth')->name('users.id.updatePermissions');
+    Route::get('/words', [WordController::class, 'getWordData'])->name('api.words')->can('Editor');
+});

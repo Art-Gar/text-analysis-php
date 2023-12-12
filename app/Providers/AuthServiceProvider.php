@@ -24,14 +24,17 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('Admin',function($user){
-            if($user->permissions == 0x7FFFFFFF) {
+            if(AuthHelper::userHasPermissions($user->permissions,RBAC::Admin)) {
                 return true;
             }
             return false;
         });
         Gate::define('Authed',function($user, RBAC $role){
-                return AuthHelper::UserHasPermissions($user,$role);
+                return AuthHelper::userHasPermissions($user->permissions,$role);
         });
+        Gate::define('Editor',function($user){
+            return $user->permissions > 1;
+    });
         //
     }
 }

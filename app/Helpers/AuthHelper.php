@@ -6,7 +6,7 @@ use App\Helpers\RBAC;
 
 class AuthHelper
 {
-    public static function UserHasPermissions($user, RBAC $role): bool {
-        return $user->role->permissions & $role->value;
+    public static function userHasPermissions($permissions, RBAC $role): bool {
+        return $permissions & $role->value;
     }
 }

@@ -25,16 +25,15 @@
     'galune_id' => $word->galune_id, 
 -->
 <template>
-    <div class="mx-auto sm:px-6 lg:px-8 max-w-full">
-      <div :key="key" class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6 text-gray-900 dark:text-gray-100 text-xs">
-          <div>
-            <div v-if="!words"> loading</div>
-            <table v-else class=" border-collapse border border-slate-500 text-sm">
-              <thead class="text-lg">
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">zodis</th>
+  <div class="mx-auto sm:px-6 lg:px-8 max-w-full">
+    <div :key="key" class="bg-white  overflow-x-auto shadow-sm sm:rounded-lg">
+      <div class="p-6 text-gray-900 border">
+        <div>
+          <v-table fixed-header height="750px">
+            <thead class="text-center">
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">zodis</th>
                 <th scope="col">pagr forma</th>
                 <th scope="col">lizdas</th>
                 <th scope="col">Kn_leksemos.PagrFormos</th>
@@ -53,14 +52,13 @@
                 <th scope="col">pastabos</th>
                 <th scope="col">galune</th>
                 <th scope="col">eilute</th>
-                </tr>
-              </thead>
-              <tbody class="text-lg border">
-                {{ console.log(words) }}
-                <tr class="border text-center" v-for="(word) in words.data" :key="word.id">
-                    <td>{{ word.id }}</td>
-                    <td>{{ word.zodis }}</td>
-                    <td>{{ word.pagr_formos_id }}</td>
+              </tr>
+            </thead>
+            <tbody class="text-lg border">
+              <tr class="border text-center" v-for="(word) in words.data" :key="word.id">
+                <td>{{ word.id }}</td>
+                <td>{{ word.zodis }}</td>
+                <td>{{ word.pagr_formos_id }}</td>
                 <td>{{ word.lizdas ? word.lizdas.lizdas : '' }}</td>
                 <td>{{ word.lizdas ? word.lizdas.pagr_formos : '' }}</td>
                 <td>{{ word.kaitybos_tipas_id }}</td>
@@ -78,22 +76,45 @@
                 <td>{{ word.pastabos }}</td>
                 <td>{{ word.galune_id }}</td>
                 <td>{{ word.kontekstas_eilute ? word.kontekstas_eilute : '' }}</td>
-                </tr>
-              </tbody>
-            </table>
+              </tr>
+            </tbody>
+
+          </v-table>
+
             <pagination :links="words.links" />
           </div>
-        </div>
+
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
 
 
 <script setup>
 import Pagination from '@/Shared/Pagination.vue'
-
 const props = defineProps({
   words: Object,
 })
+const currentWord = {
+  id: 0,
+  zodis: '',
+  pagr_formos_id: 0,
+  lizdas: '',
+  kaitybos_tipas_id: 0,
+  gimine_id: 0,
+  skaicius_id: 0,
+  linksnis_id: 0,
+  kamienas_id: 0,
+  laipsnis_id: 0,
+  apibreztumas_id: 0,
+  valdymas_id: 0,
+  refleksyvumas_id: 0,
+  rusis_id: 0,
+  laikas_id: 0,
+  nuosaka_id: 0,
+  pastabos: '',
+  galune_id: 0,
+  kontekstas_eilute: 0,
+};
 </script>

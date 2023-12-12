@@ -23,13 +23,13 @@ defineProps({
     <Head title="Welcome" />
     <MainLayout>
         <div
-            class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
+            class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100   selection:bg-red-500 selection:text-white">
 
             <div class="max-w-10xl mx-auto p-6 lg:p-8">
 
                 <div class="mt-20"
                     style="background-image: url('images/knyga-nobaznystes.jpg'); height: 750px; background-size: 100% 100%;">
-                    <h1 class=" mb-10 text-gray-900 dark:text-white font-semibold text-4xl text-center">Knyga nobažnystes
+                    <h1 class=" mb-10 text-gray-900  font-semibold text-4xl text-center">Knyga nobažnystes
                     </h1>
                     <div class="grid grid-cols-6 md:grid-cols-1 gap-6 lg:gap-1 place-items-center" style="width: 600px;">
                         <Link :href="route('about')"

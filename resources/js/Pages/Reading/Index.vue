@@ -11,12 +11,11 @@ const closeModal = () => {
     isOpen.value = false;
 };
 const params = new URLSearchParams(window.location.search);
-const metricText = ref('');
-const authorText = ref('');
-const chapterText = ref('');
-const pageText = ref('');
+const metricText = ref(params.get('metrika') ? params.get('metrika') :'');
+const authorText = ref(params.get('autorius') ? params.get('autorius') :'');
+const chapterText = ref(params.get('skyrius') ? params.get('skyrius') :'');
+const pageText = ref(params.get('puslapis') ? params.get('puslapis') :'');
 function search() {
-    console.log(metricText.value)
     router.reload({ only: ['eilutes'], data:{ metrika: metricText.value, autorius: authorText.value, skyrius: chapterText.value, puslapis: pageText.value }});
     isOpen.value=false;
 }
@@ -34,13 +33,13 @@ const props = defineProps({
 
     <MainLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Skaitymas</h2>
+            <h2 class="font-semibold text-xl text-gray-800  leading-tight">Skaitymas</h2>
         </template>
         <div class="py-12">
             <div class="col-md-12 mx-auto zero-pad-left zero-pad-right">
                 <div class="text-center">
 
-                    <button class=" text-gray-900 dark:text-gray-100" @click="isOpen = true"> open</button>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="isOpen = true"> Paieška</button>
                 </div>
                 <Modal :show="isOpen" @close="closeModal">
                     <form @submit.prevent="search()" method="get" id="searchForm">

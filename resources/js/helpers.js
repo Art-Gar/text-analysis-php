@@ -1,6 +1,5 @@
 export const RBAC = {
-    Admin:                0x7FFFFFFF,
-    EditUsers:            0x40000000,
+    Admin:                0x40000000,
     None:                 0x00000001,
     EditPagrForms:        0x00000002,
     EditKaitymas:         0x00000004,

@@ -19,30 +19,35 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div>
-        <div class="min-h-screen text-palem bg-gray-100 dark:bg-gray-900">
-            <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+        <div class="min-h-screen text-palem bg-gray-100">
+            <nav class="bg-white  border-b border-gray-100"> 
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div v-if="$page.props.auth.user">
                         <!-- Authed nav -->
                         <div class="flex justify-between h-16">
                             <div class="flex">
                                 <!-- Logo -->
-                                <div class="shrink-0 flex items-center">
-                                    <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                    </Link>
-                                </div>
+                                                                    <!--
+
+                                                                        <div class="shrink-0 flex items-center">
+                                                                            <Link :href="route('dashboard')">
+                                                                            <ApplicationLogo
+                                                                                class="block h-9 w-auto fill-current text-gray-800"/>
+                                                                            </Link>
+                                                                        </div>
+                                    -->
 
                                 <!-- Navigation Links -->
                                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                    <NavLink  :href="route('home')" :active="route().current('home')">
+                                    <NavLink :href="route('home')" :active="route().current('home')">
                                         Pagrindinis
                                     </NavLink>
-                                    <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                        Dashboard
-                                    </NavLink>
-                                    <NavLink  :href="route('reading')" :active="route().current('reading')">
+                                    <!--
+                                        <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                            Dashboard
+                                        </NavLink>
+                                    -->
+                                    <NavLink :href="route('reading')" :active="route().current('reading')">
                                         Skaityti
                                     </NavLink>
                                     <NavLink v-if="$page.props.auth.user.permissions >= 2147483647" :href="route('users')"
@@ -57,9 +62,9 @@ const showingNavigationDropdown = ref(false);
                                         :active="route().current('words')">
                                         Žodžiai
                                     </NavLink>
-                                    <NavLink v-if="$page.props.auth.user.permissions >= 2147483647" :href="route('kaitymas')"
-                                        :active="route().current('kaitymas')">
-                                        Kaitymas
+                                    <NavLink v-if="$page.props.auth.user.permissions >= 2147483647"
+                                        :href="route('kaityba')" :active="route().current('kaityba')">
+                                        Kaityba
                                     </NavLink>
                                 </div>
                             </div>
@@ -71,7 +76,7 @@ const showingNavigationDropdown = ref(false);
                                         <template #trigger>
                                             <span class="inline-flex rounded-md">
                                                 <button type="button"
-                                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500  bg-white  hover:text-gray-700  focus:outline-none transition ease-in-out duration-150">
                                                     {{ $page.props.auth.user.name }}
 
                                                     <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg"
@@ -85,9 +90,9 @@ const showingNavigationDropdown = ref(false);
                                         </template>
 
                                         <template #content>
-                                            <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
+                                            <DropdownLink :href="route('profile.edit')"> Profilis </DropdownLink>
                                             <DropdownLink :href="route('logout')" method="post" as="button">
-                                                Log Out
+                                                Atsijungti
                                             </DropdownLink>
                                         </template>
                                     </Dropdown>
@@ -97,7 +102,7 @@ const showingNavigationDropdown = ref(false);
                             <!-- Hamburger -->
                             <div class="-mr-2 flex items-center sm:hidden">
                                 <button @click="showingNavigationDropdown = !showingNavigationDropdown"
-                                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
+                                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400  hover:text-gray-500  hover:bg-gray-100  focus:outline-none focus:bg-gray-100  focus:text-gray-500  transition duration-150 ease-in-out">
                                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                         <path :class="{
                                             hidden: showingNavigationDropdown,
@@ -116,25 +121,29 @@ const showingNavigationDropdown = ref(false);
                             <!-- Responsive Navigation Menu -->
                             <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
                                 class="sm:hidden">
-                                <div class="pt-2 pb-3 space-y-1">
-                                    <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                        Dashboard
-                                    </ResponsiveNavLink>
-                                </div>
+                                <!--
+
+                                    <div class="pt-2 pb-3 space-y-1">
+                                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                                            Dashboard
+                                        </ResponsiveNavLink>
+                                    </div>
+
+                                -->
 
                                 <!-- Responsive Settings Options -->
-                                <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
+                                <div class="pt-4 pb-1 border-t border-gray-200">
                                     <div class="px-4">
-                                        <div class="font-medium text-base text-gray-800 dark:text-gray-200">
+                                        <div class="font-medium text-base text-gray-800"> 
                                             {{ $page.props.auth.user.name }}
                                         </div>
                                         <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}
                                         </div>
                                     </div>
                                     <div class="mt-3 space-y-1">
-                                        <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
+                                        <ResponsiveNavLink :href="route('profile.edit')"> Profilis </ResponsiveNavLink>
                                         <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                            Log Out
+                                            Atsijungti
                                         </ResponsiveNavLink>
                                     </div>
                                 </div>
@@ -147,10 +156,13 @@ const showingNavigationDropdown = ref(false);
                             <div class="flex">
                                 <!-- Logo -->
                                 <div class="shrink-0 flex items-center">
+                                    <!--
                                     <Link :href="route('dashboard')">
                                     <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                        class="block h-9 w-auto fill-current text-gray-800"  />
                                     </Link>
+                                    -->
+
                                 </div>
 
                                 <!-- Navigation Links -->
@@ -167,11 +179,11 @@ const showingNavigationDropdown = ref(false);
                                     <p>
 
                                         <NavLink :href="route('login')"
-                                            class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                                            Log in</NavLink>
+                                            class="font-semibold text-gray-600 hover:text-gray-900   focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                                            Prisijungti</NavLink>
                                         <NavLink :href="route('register')"
-                                            class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-                                            Register</NavLink>
+                                            class="font-semibold text-gray-600 hover:text-gray-900   focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                                            Registruotis</NavLink>
                                     </p>
                                 </div>
                             </div>
@@ -182,7 +194,7 @@ const showingNavigationDropdown = ref(false);
             </nav>
 
             <!-- Page Heading -->
-            <header class="bg-white dark:bg-gray-800 shadow" v-if="$slots.header">
+            <header class="bg-white  shadow" v-if="$slots.header">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

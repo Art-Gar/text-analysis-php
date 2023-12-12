@@ -1,8 +1,8 @@
 
 <template>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900 dark:text-gray-100 text-lg">
+        <div class="bg-white  overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-gray-900  text-lg">
                 <table class="table table-bordered w-100">
                     <thead>
                         <tr>
@@ -11,12 +11,12 @@
                             <th scope="col">Rolė</th>
                         </tr>
                     </thead>
-                    <tbody class=" text-lg">
+                    <tbody class=" text-lg text-center">
                         <tr v-for="(user) in users" :key="user.id">
                             <td>{{ user.name }}</td>
                             <td>{{ user.email }}</td>
-                            <td>{{ userType(user.permissions) }} {{ user.permissions }} </td>
-                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            <td>{{ userType(user.permissions) }} </td>
+                            <button v-if ="user.id != $page.props.auth.user.id" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 @click="openModal(user)"> Keisti rolę</button>
 
                         </tr>
@@ -25,7 +25,7 @@
             </div>
         </div>
         <Modal :show="isOpen" @close="closeModal">
-            <div class="text-gray-900 dark:text-gray-100">
+            <div class="text-gray-900">
                 <p>{{ currentUser.name }}</p><br>
                 <p>{{ currentUser.email }}</p><br>
                 <h1>Leidimai:</h1>
@@ -33,53 +33,52 @@
                     <tbody class=" text-lg">
                         <tr>
                             <td>keisti kaitybą
-                                <Checkbox @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditKaitymas)"
-                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditKaitymas)" />
+                                <Checkbox class="outline-black" @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditKaitymas)"
+                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditKaitymas)"> </Checkbox>
                             </td>
                             <td>keisti giminę
-                                <Checkbox @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditGimine)"
-                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditGimine)" />
+                                <Checkbox @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditGimine)" :checked="userHasPermissions(currentUser.permissions, RBAC.EditGimine)"> </Checkbox>
                             </td>
                             <td>keisti skaičių
                                 <Checkbox @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditSkaicius)"
-                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditSkaicius)" />
+                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditSkaicius)"> </Checkbox>
                             </td>
                             <td>keisti linksnį
                                 <Checkbox @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditLinksnis)"
-                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditLinksnis)" />
+                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditLinksnis)"> </Checkbox>
                             </td>
                         </tr>
                         <tr>
                             <td>keisti kamieną
                                 <Checkbox @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditKamienas)"
-                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditKamienas)" />
+                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditKamienas)"> </Checkbox>
                             </td>
                             <td>keisti laipsnį
                                 <Checkbox @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditLaipsnis)"
-                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditLaipsnis)" />
+                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditLaipsnis)"> </Checkbox>
                             </td>
                             <td>keisti apibrėtumą
                                 <Checkbox @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditApibreztumas)"
-                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditApibreztumas)" />
+                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditApibreztumas)"> </Checkbox>
                             </td>
                             <td>keisti valdymą
                                 <Checkbox @update:checked="(newVal) => updatePermissions(newVal, RBAC.EditValdymas)"
-                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditValdymas)" />
+                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditValdymas)"> </Checkbox>
                             </td>
                         </tr>
                         <tr>
                             <td>keisti laiką
-                                <Checkbox :checked="userHasPermissions(currentUser.permissions, RBAC.EditLaikas)" />
+                                <Checkbox :checked="userHasPermissions(currentUser.permissions, RBAC.EditLaikas)"> </Checkbox>
                             </td>
                             <td>keisti laipsnį
-                                <Checkbox :checked="userHasPermissions(currentUser.permissions, RBAC.EditLaipsnis)" />
+                                <Checkbox :checked="userHasPermissions(currentUser.permissions, RBAC.EditLaipsnis)"> </Checkbox>
                             </td>
                             <td>keisti refleksyvumą
-                                <Checkbox :checked="userHasPermissions(currentUser.permissions, RBAC.EditRefleksyvumas)" />
+                                <Checkbox :checked="userHasPermissions(currentUser.permissions, RBAC.EditRefleksyvumas)"> </Checkbox>
                             </td>
                             <td>keisti savarankiškumą
                                 <Checkbox
-                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditSavarankiskumas)" />
+                                    :checked="userHasPermissions(currentUser.permissions, RBAC.EditSavarankiskumas)"> </Checkbox>
                             </td>
                         </tr>
                     </tbody>
@@ -123,6 +122,7 @@ async function updatePermissions(checked, permissions) {
     //         console.log(data)
     //     }
     // })
+    console.log()
     await axios.patch(`http://localhost:8000/api/users/${currentUser.id}/permissions`, { permissions: currentUser.permissions }, { withCredentials: true, withDefaults: true });
     // router.patch(`api/users/${currentUser.id}/permissions`, {permissions: currentUser.permissions}, { expectsJson: true });
     router.reload({ only: ['users'] });

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Helpers\AuthHelper;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -60,6 +62,8 @@ class UserController extends Controller
     
     public function updateUserPermissions(Request $request,string $id) {
         {
+            $this->authorize('Admin');
+
             if(!is_numeric($id) || strpos($id,'.')) {
                 return response()->json([
                     'message' => "Id should be an integer",
@@ -69,14 +73,21 @@ class UserController extends Controller
                 $valid = request()->validate([
                     'permissions' => 'required|integer',
                 ]);
+                
             } catch (ValidationException $err) {
                 return $err->validator->errors();
             }
-            if($valid['permissions'] >= RBAC::Admin->value) {
+            // if($valid['permissions'] >= RBAC::Admin->value) {
+            //     return response()->json([
+            //         'message' => "Cannot set another user to admin",
+            //     ], 400);
+            // }
+            if ($request->user()->id == $id) {
                 return response()->json([
-                    'message' => "Cannot set another user to admin",
+                    'message' => "Cannot edit own permissions",
                 ], 400);
             }
+            $user = User::findById($id);
             User::updateUserPermissions($id, $valid['permissions']);
             return response()->noContent(200);
         }

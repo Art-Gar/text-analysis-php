@@ -1,10 +1,10 @@
 <template>
   <div class="mx-auto sm:px-6 lg:px-8 max-w-full">
-    <div :key="key" class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-      <div class="p-6 text-gray-900 dark:text-gray-100 text-xs">
+    <div :key="key" class="bg-white shadow-sm sm:rounded-lg">
+      <div class="p-6 text-gray-900  text-xs">
         <div>
           <div v-if="!isLoaded"> loading</div>
-          <table v-else class=" border-collapse border border-slate-500 text-sm">
+          <v-table class=" border-collapse border border-slate-500 text-sm" fixed-header height="750px">
             <thead class="text-lg">
               <tr>
                 <th scope="col">ID</th>
@@ -63,7 +63,7 @@
                 <td>{{ word.galune_id }}</td>
               </tr>
             </tbody>
-          </table>
+          </v-table>
         </div>
         <pagination :links="words.links" />
       </div>

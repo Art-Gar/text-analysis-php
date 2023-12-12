@@ -32,19 +32,21 @@ Route::get('/about', function () {
     ]);
 })->name('about');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/lexemes', [LexemeController::class, 'getAll'])->name('lexemes');
-    Route::get('/words', [WordController::class, 'getAll'])->name('words');
-    Route::get('/reading', [ReadingController::class, 'getAll'])->name('reading');
-    Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->middleware(['auth', 'verified'])->name('users')->can('Admin');
-    Route::get('/kaitymas', [WordController::class, 'getKaitymas'])->name('kaitymas');
 });
+Route::middleware(['auth','verified'])->group(function () {
+    Route::get('/lexemes', [LexemeController::class, 'getAll'])->name('lexemes')->can('Admin');
+    Route::get('/words', [WordController::class, 'getAll'])->name('words')->can('Admin');
+    Route::get('/reading', [ReadingController::class, 'getAll'])->name('reading');
+    Route::get('/kaityba', [WordController::class, 'getKaityba'])->name('kaityba');
+});
+Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->middleware('auth')->name('users');
 
 
 

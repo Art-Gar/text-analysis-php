@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
+
+use function Laravel\Prompts\error;
+
 class kn_zodziai extends Model
 {
     protected  $table = "kn_zodziai";
@@ -69,7 +72,7 @@ class kn_zodziai extends Model
    }
    public function kamienas(): HasOne
    {
-       return $this->hasOne(kamienas::class, 'id', 'kamienas_id');
+       return $this->hasOne(kamienai::class, 'id', 'kamienas_id');
     }
     public function laipsnis(): HasOne
     {
@@ -110,7 +113,7 @@ class kn_zodziai extends Model
    }
    public function asmuo(): HasOne
    {
-       return $this->hasOne(asmuo::class, 'id', 'asmuo_id');
+       return $this->hasOne(asmens_kategorija::class, 'id', 'asmuo_id');
    }
    public function eilute(): HasOne
    {
@@ -118,15 +121,15 @@ class kn_zodziai extends Model
    }
    public function galune(): HasOne
    {
-       return $this->hasOne(galune::class, 'id', 'galune_id');
+       return $this->hasOne(galunes::class, 'id', 'galune_id');
    }
-   public static function getAllWordsJoined (string $word = null) {
+   public static function getAllWords (string $word = null) {
        $query = self::query();
        if($word && $word != '') {
            $query->whereRaw('LOWER(kn_zodziai.zodis) LIKE ?', '%'.$word.'%');
         }
 
-        $words = $query->paginate(50)->through(function ($word) {
+        $words = $query->paginate(100)->through(function ($word) {
             return [
                 'id' => $word->id,
                 'kontekstas_zodziai_id' => $word->kontekstas_zodziai_id,
@@ -207,53 +210,62 @@ class kn_zodziai extends Model
                 $query->whereRaw('LOWER(kn_zodziai.zodis) LIKE ?', '%'.$word.'%');
             }
             $lexeme = $request->get('lexeme');
-            if($lexeme && $lexeme != '') {
+            if($lexeme && $lexeme != '' && $lexeme != '0') {
+                error_log($lexeme);
                 $query->whereRaw('kn_zodziai.pagr_formos_id = ?', $lexeme);
             }
             // $kalbos_dalis = $request->get('kalbos_dalis');
-            // if($word && $word != '') {
-            //     $query->whereRaw('kn_zodziai.kalbod_dalis_id = ?', '%'.$kalbos_dalis.'%');
-            // }
+            // if($kalbos_dalis && $kalbos_dalis != 0) {
+            //     $query->whereRaw('kn_zodziai.kalbos_dalis_id = ?', '%'.$kalbos_dalis.'%');
+            // } //lexeme
             // $kilme = $request->get('kilme');
             // if($word && $word != '') {
             //     $query->whereRaw('kn_zodziai.kilme_id = ?', '%'.$kilme.'%');
-            // }
+            // } //lexeme
             $kamienas = $request->get('kamienas');
-            if($kamienas && $kamienas != '') {
-                $query->whereRaw('kn_zodziai.kamienas_id = ?', '%'.$kamienas.'%');
+            if($kamienas && $kamienas != '' && $kamienas !='0') {
+                $query->whereRaw('kn_zodziai.kamienas_id = ?', $kamienas);
             }
             $gimine = $request->get('gimine');
-            if($gimine && $gimine != '') {
-                $query->whereRaw('kn_zodziai.gimine_id = ?', '%'.$gimine.'%');
+            if($gimine && $gimine != '' && $gimine != '0') {
+                $query->whereRaw('kn_zodziai.gimine_id = ?', $gimine);
             }
             $valdymas = $request->get('valdymas');
-            if($valdymas && $valdymas != '') {
-                $query->whereRaw('kn_zodziai.valdymas_id = ?', '%'.$valdymas.'%');
+            if($valdymas && $valdymas != '' && $valdymas != '') {
+                $query->whereRaw('kn_zodziai.valdymas_id = ?', $valdymas);
             }
-            // $laikas = $request->get('laikas');
-            // if($laikas && $laikas != '') {
-            //     $query->whereRaw('kn_zodziai.laikas = ?', '%'.$kamienas.'%');
-            // }
+            $laikas = $request->get('laikas');
+            if($laikas && $laikas != '' && $laikas != '') {
+                $query->whereRaw('kn_zodziai.laikas = ?', $laikas);
+            }
             $asmuo = $request->get('galune');
-            if($asmuo && $asmuo != '') {
-                $query->whereRaw('kn_zodziai.galune_id = ?', '%'.$asmuo.'%');
+            if($asmuo && $asmuo != '' && $asmuo != '') {
+                $query->whereRaw('kn_zodziai.asmuo_id = ?', $asmuo);
             }
             $skaicius = $request->get('skaicius');
-            if($skaicius && $skaicius != '') {
-                $query->whereRaw('kn_zodziai.skaicius_id = ?', '%'.$skaicius.'%');
+            if($skaicius && $skaicius != '' && $skaicius != '0') {
+                $query->whereRaw('kn_zodziai.skaicius_id = ?', $skaicius);
             }
         }
         //->whereRaw('LOWER(kn_zodziai.pagr_formos_id) LIKE ?', '%'."10000".'%');
 
-        $words = $query->paginate(50)->through(function ($word) {
-            $eilute1 = kn_tekstas_eil::select(['eilutes'])->where('kn_tekstas_eil.id', '=', $word->kontekstas_eilute-1)->first();
-            $eilute2 = kn_tekstas_eil::select(['eilutes'])->where('kn_tekstas_eil.id', '=', $word->kontekstas_eilute+1)->first();
-            error_log($eilute1);
-            error_log($eilute2);
+        $words = $query->paginate(15)->through(function ($word) {
+            $mainWord = kn_tekstas_zodziais::select(['id','zodziai', 'nr'])->where('kn_tekstas_zodziais.id', '=', $word->kontekstas_zodziai_id)->first();
+            $eilute1 = kn_tekstas_zodziais::select(['zodziai'])->where([
+                ['kn_tekstas_zodziais.nr', '>', $mainWord->nr-10],
+                ['kn_tekstas_zodziais.nr', '<', $mainWord->nr],
+                ])->limit(10)->get();
+            
+            $eilute2 = kn_tekstas_zodziais::select(['zodziai'])->where('kn_tekstas_zodziais.nr', '>', $mainWord->nr)->limit(10)->get();
+            $context = $eilute1->map(function ($item) {
+                return $item['zodziai'];
+            })->join(' ').'¶'.$mainWord['zodziai'].$eilute2->map(function ($item) {
+                return $item['zodziai'];
+            })->join(' ');
             return [
                 'id' => $word->id,
                 'zodis' => $word->zodis,
-                'kontekstas_eilute' =>  ($eilute1 ? $eilute1->eilutes : '')."||".$word->eilute->eilutes."||".($eilute2 ? $eilute2->eilutes : ''),
+                'kontekstas_eilute' =>  $context,
                 'pagr_formos_id' => $word->pagr_formos_id,
                 'kontekstas_zodziai_id' => $word->kontekstas_zodziai_id,
                 'lizdas' => $word->pagr_forma,

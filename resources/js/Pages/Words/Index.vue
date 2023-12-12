@@ -7,9 +7,9 @@
 
     <MainLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Žodžiai</h2>
+            <h2 class="font-semibold text-xl text-gray-800  leading-tight">Žodžiai</h2>
         </template>
-        <input @keyup.enter="searchForWord()" v-model="text" type="text">
+        <input @keyup.enter="searchForWord()" v-model="text" type="text" placeholder="ieškoti žodžių">
         <div class="py-12">
             <p>
         <!--<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="reloadUsers()"> {{ key }}</button>-->

@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class veiksmazodio_forma extends Model
 {
-    protected  $table = "veiksmazodio_forma";
+    protected  $table = "veiksmazodzio_forma";
     use HasFactory;
 }

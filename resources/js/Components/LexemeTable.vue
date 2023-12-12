@@ -3,7 +3,7 @@
 import { userType } from "@/helpers"
 </script>
 <template>
-    <table class="table table-bordered w-100">
+    <v-table class="table table-bordered w-100" fixed-header height="750px">
         <thead>
             <tr>
                 <th scope="col">ID</th>
@@ -25,7 +25,7 @@ import { userType } from "@/helpers"
                 <th scope="col">Jungiamasis balsis</th>
             </tr>
         </thead>
-        <tbody style="font-size: 12px">
+        <tbody>
             <tr v-for="(lexeme) in lexemes" :key="lexeme.id">
                 <td>{{ lexeme.id }}</td>
                 <td>{{ lexeme.lizdas }}</td>
@@ -46,7 +46,7 @@ import { userType } from "@/helpers"
                 <td>{{ lexeme.jungiamasis_balsis }}</td>
             </tr>
         </tbody>
-    </table>
+    </v-table>
 </template>
 <script>
 export default {
