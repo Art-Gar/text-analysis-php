@@ -3,17 +3,23 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Auth\MustVerifyEmail;
+use App\Helpers\AuthHelper;
+use App\Helpers\RBAC;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
-
-class User extends Authenticatable
+use Illuminate\Database\Query\Builder;
+/**
+* @mixin Builder
+*/
+class User extends Authenticatable implements MustVerifyEmailContract
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, MustVerifyEmail;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +30,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'permissions',
     ];
 
     /**
@@ -50,8 +55,28 @@ class User extends Authenticatable
 //    {
 //        return $this->hasOne(Role::class, 'id', 'role_id');
 //    }
-    public static function getAll(): Collection
+    public function getAll(): Collection
     {
-        return DB::table('users')->get();
+        return User::select(['id','name','email','permissions'])->get();
+    }
+    public static function findById(int $id): ?User
+    {
+        $user = User::select(['id','name','email','permissions'])->where('id', $id)->first();
+        return $user;
+    } 
+    public static function updateUserPermissions(int $id, int $permissions)
+    {
+        $user = User::findById($id);
+        if (!(AuthHelper::userHasPermissions($permissions, RBAC::Admin) & AuthHelper::userHasPermissions($user->permissions, RBAC::Admin))) {
+            error_log('admin');
+        }
+        User::where('id', $id)->update(['permissions' => $permissions]);
+    }
+    public static function getUsers(string $search = null) {
+        $query = self::query();
+        if($search && $search != '') {
+            $query->whereRaw('LOWER(user.name) LIKE ?', '%'.$search.'%')->orWhereRaw('LOWER(user.email) LIKE ?', '%'.$search.'%');
+        }
+        return $query->get();
     }
 }

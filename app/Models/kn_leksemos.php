@@ -23,7 +23,16 @@ class kn_leksemos extends Model
             'kn_leksemos.pamatinis_zodis', 'kn_leksemos.darybos_afiksas', 'kn_leksemos.pastabos', 'kn_leksemos.saknis',
             'kn_leksemos.pamatine_saknis1', 'kn_leksemos.pamatine_saknis2',  'priesaga.priesaga as priesagos_id',
             'kn_leksemos.jungiamasis_balsis']) ->
-        orderBy('kn_leksemos.id') -> paginate(20);
+        orderBy('kn_leksemos.id')->get();
+    }
+    public static function getAllLexemes () {
+        return self::
+        select(['kn_leksemos.id', 'kn_leksemos.lizdas', 'kn_leksemos.pagr_formos', 'kalbos_dalis_id',
+            'kilme_id', 'struktura_id', 'kaitybos_tipas_id', 'daryba_id',
+            'kn_leksemos.pamatinis_zodis', 'kn_leksemos.darybos_afiksas', 'kn_leksemos.pastabos', 'kn_leksemos.saknis',
+            'kn_leksemos.pamatine_saknis1', 'kn_leksemos.pamatine_saknis2',  'priesagos_id',
+            'kn_leksemos.jungiamasis_balsis']) ->
+        orderBy('kn_leksemos.id')->get();
     }
     public static function searchForLexemes ($searchLexeme) {
         return self::leftJoin('kalbos_dalis', 'kn_leksemos.kalbos_dalis_id', '=', 'kalbos_dalis.id') ->

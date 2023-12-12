@@ -7,11 +7,30 @@ use App\Models\kn_skyrius;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\kn_tekstas_eil;
-
+use Inertia\Response;
 class ReadingController extends Controller
 {
-    public function getAll() : View {
-        error_log($this->getAuthorId('kt'));
+    public function getAll(Request $request) : Response {
+        $text = kn_tekstas_eil::query();
+        if($request->has('autorius') && $request -> query('autorius') != '') {
+            $text->where('autorius_id', $this->getAuthorId($request -> query('autorius')));
+        }
+        if($request->has('metrika')&& $request -> query('metrika') != '') {
+            $text->where('metrika', $request->query('metrika'));
+        }
+        if($request->has('skyrius') && $request ->query('skyrius') != '') {
+            $text->where('skyrius_id', $request->query('skyrius'));
+        }
+        if($request->has('puslapis') && $request ->query('puslapis') != '') {
+            $text->where('puslapis', $request->query('puslapis'));
+        }
+        return inertia('Reading/Index', [
+            'heading' => 'skaitymas',
+            'eilutes' => $text->get(),
+            'metrics' => $this->getMetricsByName(),
+            'authors' => $this->getAuthorsByName(),
+            'chapters' => $this->getChaptersByName()
+        ]);
         return view('skaitymas', [
             'heading' => 'skaitymas',
             'eilutes' => kn_tekstas_eil::all(),
@@ -34,7 +53,6 @@ class ReadingController extends Controller
 //        }
         $q = kn_tekstas_eil::query();
         if ($request->filled('metrika')) {
-            error_log($request -> get('metrika'));
             $q-> where('metrika', $request -> get('metrika')); //Input::get('metrika')
         }
         if ($request->filled('skyrius')) {
