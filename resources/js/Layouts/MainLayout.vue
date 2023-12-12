@@ -20,14 +20,14 @@ const showingNavigationDropdown = ref(false);
 <template>
     <div>
         <div class="min-h-screen text-palem bg-gray-100">
-            <nav class="bg-white  border-b border-gray-100"> 
+            <nav class="bg-white  border-b border-gray-100">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div v-if="$page.props.auth.user">
                         <!-- Authed nav -->
                         <div class="flex justify-between h-16">
                             <div class="flex">
                                 <!-- Logo -->
-                                                                    <!--
+                                <!--
 
                                                                         <div class="shrink-0 flex items-center">
                                                                             <Link :href="route('dashboard')">
@@ -62,8 +62,8 @@ const showingNavigationDropdown = ref(false);
                                         :active="route().current('words')">
                                         Žodžiai
                                     </NavLink>
-                                    <NavLink v-if="$page.props.auth.user.permissions >= 2147483647"
-                                        :href="route('kaityba')" :active="route().current('kaityba')">
+                                    <NavLink v-if="$page.props.auth.user.permissions >= 2147483647" :href="route('kaityba')"
+                                        :active="route().current('kaityba')">
                                         Kaityba
                                     </NavLink>
                                 </div>
@@ -134,7 +134,7 @@ const showingNavigationDropdown = ref(false);
                                 <!-- Responsive Settings Options -->
                                 <div class="pt-4 pb-1 border-t border-gray-200">
                                     <div class="px-4">
-                                        <div class="font-medium text-base text-gray-800"> 
+                                        <div class="font-medium text-base text-gray-800">
                                             {{ $page.props.auth.user.name }}
                                         </div>
                                         <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}

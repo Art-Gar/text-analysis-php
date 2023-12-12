@@ -1,6 +1,7 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import MainLayout from '@/Layouts/MainLayout.vue'
+import { RBAC, userHasPermissions } from '@/helpers';
 defineProps({
     canLogin: {
         type: Boolean,
@@ -34,60 +35,58 @@ defineProps({
                     <div class="grid grid-cols-6 md:grid-cols-1 gap-6 lg:gap-1 place-items-center" style="width: 600px;">
                         <Link :href="route('about')"
                             class="scale-75 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01] disabled">
-                            Apie šaltinį
+                        Apie šaltinį
                         </Link>
 
-                        <Link :href="route('users')"
+
+                        <Link :href="route('reading')"
                             class="scale-75 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
-                            <div>
-                                Skaityti tekstą
-                            </div>
+                        <div>
+                            Skaityti tekstą
+                        </div>
                         </Link>
 
-                        <Link :href="route('words')"
+                        <Link v-if="$page.props.auth.user && userHasPermissions($page.props.auth.user.permissions, RBAC.Admin)"
+                            :href="route('words')"
                             class="scale-75 mt-5 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
-                            <div>
-                                Visi žodžiai
-                            </div>
+                        <div>
+                            Visi žodžiai
+                        </div>
                         </Link>
 
-                        <Link :href="route('lexemes')"
+                        <Link v-if="$page.props.auth.user && userHasPermissions($page.props.auth.user.permissions, RBAC.Admin)"
+                            :href="route('lexemes')"
                             class="scale-75 mt-5 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
-                            <div>
-                                Visos leksemos
-                            </div>
+                        <div>
+                            Visos leksemos
+                        </div>
+
                         </Link>
-                    </div>
-                    <h1 class=" mt-10 text-gray-800 font-semibold text-2xl text-center">Duomenų atranka ir įvedimas</h1>
-                    <div class="grid grid-cols-6 md:grid-cols-1 gap-6 lg:gap-1 place-items-center" style="width: 600px;">
-                        
-                        <Link :href="route('users')"
-                            class="scale-75 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
+                        <div v-if="$page.props.auth.user && $page.props.auth.user.permissions > 1"
+                            class="grid grid-cols-6 md:grid-cols-1 gap-6 lg:gap-1 place-items-center" style="width: 600px;">
+                            <h1 class=" mt-10 text-gray-800 font-semibold text-2xl text-center">Duomenų atranka ir
+                                įvedimas</h1>
+
+                            <Link :href="route('kaityba')"
+                                class="scale-75 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
                             Kaityba
-                        </Link>
-                        <button>
-                            
-                        </button>
-                        <Link :href="route('users')"
-                            class="scale-75 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
-                            <div>
-                                Žodžių daryba
-                            </div>
-                        </Link>
-
-                        <Link :href="route('users')"
-                            class="scale-75 mt-5 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
-                            <div>
-                                Leksika ir semantika
-                            </div>
-                        </Link>
-
-                        <Link :href="route('users')"
-                            class="scale-75 mt-5 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
-                            <div>
-                                Leksika ir semantika
-                            </div>
-                        </Link>
+                            </Link>
+                            <!--
+                <Link :href="route('users')"
+                    class="scale-75 mt-5 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
+                    <div>
+                        Leksika ir semantika
+                    </div>
+                </Link>
+            
+                <Link :href="route('users')"
+                    class="scale-75 mt-5 h-16 p-6 text-2xl font-semibold justify-center border-sol w-3/6 bg-gray-300 from-gray-700/50 via-transparent rounded-lg shadow-2xl flex motion-safe:hover:scale-[1.01]">
+                    <div>
+                        Leksika ir semantika
+                    </div>
+                </Link>
+            -->
+                        </div>
                     </div>
                 </div>
 

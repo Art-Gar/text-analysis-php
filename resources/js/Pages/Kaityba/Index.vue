@@ -13,7 +13,12 @@
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="isOpen = true">
                 Paieška</button>
         </div>
+        <div class="text-center">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="getPdf">
+                Generuoti ataskaitą</button>
 
+
+        </div>
         <Modal maxWidth="6xl" :show="isOpen" @close="closeModal">
             <form @submit.prevent="search()" method="get" id="searchForm">
                 <div class="grid grid-cols-3">
@@ -26,7 +31,7 @@
                         </template>
                     </v-autocomplete>
                     <v-select class="shrink" name="kalbos_dalis" placeholder="kalbos dalis" label="Kalbos dalis"
-                        max-width="100" v-model="searchBudvardis" :items="kalbos_dalys" item-title="kalbos_dalis"
+                        max-width="100" v-model="searchKalbosDalis" :items="kalbos_dalys" item-title="kalbos_dalis"
                         item-value="id">
                         <template v-slot:item="{ props, item }">
                             <v-list-item v-bind="props"
@@ -100,15 +105,15 @@
                         </template>
                     </v-select>
                     <v-select name="Reiksme" placeholder="Reiksme" label="Reikšmė" max-width="100" v-model="searchReiksme"
-                        :items="reiksmes" item-title="reiksme_aiskinimas" item-value="id">
+                        :items="reiksmes" item-title="reiksmes_aiskinimas" item-value="id">
                         <template v-slot:item="{ props, item }">
                             <v-list-item v-bind="props"
-                                :title="`${item?.raw?.id} - ${item?.raw?.reiksme_aiskinimas}`"></v-list-item>
+                                :title="`${item?.raw?.id} - ${item?.raw?.reiksmes_aiskinimas}`"></v-list-item>
                         </template>
                     </v-select>
                     <div></div>
                     <v-text-field type="number" :v-model="searchPuslapis" label="Puslapis"
-                        @input="searchPuslapis = $event !== '' ? $event : null"></v-text-field>
+                        @input="searchPuslapis = $event !== '' ? $event.data : 0"></v-text-field>
                 </div>
 
                 <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -123,7 +128,10 @@
             <p>
                 <!--<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="reloadUsers()"> {{ key }}</button>-->
             </p>
-            <KaitybaTable :words="words"> </KaitybaTable>
+            <KaitybaTable @reload="reloadWords" :words="words" :lexemes="lexemes" :kalbos_dalys="kalbos_dalys" :kamienai="kamienai" :gimines="gimines" :rusys="rusys" :laikai="laikai"
+            :veiksmazodzio_formos="veiksmazodzio_formos" :refleksyvumai="refleksyvumai" :laipsniai="laipsniai" :galunes="galunes" :savarankiskumai="savarankiskumai" :valdymai="valdymai"
+            :reiksmes="reiksmes" :puslapiai="puslapiai" :eilutes="eilutes" :KN_dalys="KN_dalys"
+            > </KaitybaTable>
 
         </div>
     </MainLayout>
@@ -137,6 +145,7 @@ import TextInput from "@/Components/TextInput.vue";
 import { onMounted, nextTick, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import Modal from '@/Components/Modal.vue';
+import axios from 'axios';
 const isOpen = ref(false)
 const closeModal = () => {
     isOpen.value = false;
@@ -147,7 +156,7 @@ const queryWord = params.get('word');
 const text = ref(queryWord ? queryWord : '');
 const searchLexeme = ref('');
 const searchWord = ref('');
-const searchBudvardis = ref(0);
+const searchKalbosDalis = ref(0);
 const searchKamienas = ref(0);
 const searchGimine = ref(0);
 const searchLaikas = ref(0);
@@ -159,7 +168,7 @@ const searchSavarankiskumas = ref(0);
 const searchValdymas = ref(0);
 const searchReiksme = ref(0);
 const searchLaipsnis = ref(0);
-const searchPuslapis = ref(0);
+const searchPuslapis = ref('');
 const searchEilute = ref(0);
 const searchDalis = ref(0);
 const props = defineProps({
@@ -181,12 +190,12 @@ const props = defineProps({
     eilutes: Object,
     KN_dalys: Object,
 });
-const words = props.words;
 function search() {
+    console.log(searchPuslapis.value);
     router.reload({ only: ['words'], data:{ 
         word: searchWord.value, 
         lexeme: searchLexeme.value, 
-        budvardis: searchBudvardis.value,
+        kalbos_dalis: searchKalbosDalis.value,
         kamienas: searchKamienas.value,
         gimine: searchGimine.value,
         galune: searchGalune.value,
@@ -203,6 +212,67 @@ function search() {
         dalis: searchDalis.value,
     }});
     isOpen.value=false;
+}
+async function getPdf() {
+    axios({
+    url: 'api/word-pdf', //your url
+    method: 'GET',
+    responseType: 'blob', // important
+    params: {
+        word: searchWord.value, 
+        lexeme: searchLexeme.value, 
+        kalbos_dalis: searchKalbosDalis.value,
+        kamienas: searchKamienas.value,
+        gimine: searchGimine.value,
+        galune: searchGalune.value,
+        laikas: searchLaikas.value,
+        veiksmForma: searchVeiksmForma.value,
+        refleksyvumas: searchRefleksyvumas.value,
+        galune: searchGalune.value,
+        savarankiskumas: searchSavarankiskumas.value,
+        valdymas: searchValdymas.value,
+        reiksme: searchReiksme.value,
+        laipsnis: searchLaipsnis.value,
+        puslapis: searchPuslapis.value,
+        eilutes: searchEilute.value,
+        dalis: searchDalis.value,
+    }
+}).then((response) => {
+    // create file link in browser's memory
+    const href = URL.createObjectURL(response.data);
+
+    // create "a" HTML element with href to file & click
+    const link = document.createElement('a');
+    link.href = href;
+    link.setAttribute('download', 'file.pdf'); //or any other extension
+    document.body.appendChild(link);
+    link.click();
+
+    // clean up "a" element & remove ObjectURL
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);
+});
+}
+function reloadWords() {
+    router.reload({ only: ['words'], data:{ 
+        word: searchWord.value, 
+        lexeme: searchLexeme.value, 
+        kalbos_dalis: searchKalbosDalis.value,
+        kamienas: searchKamienas.value,
+        gimine: searchGimine.value,
+        galune: searchGalune.value,
+        laikas: searchLaikas.value,
+        veiksmForma: searchVeiksmForma.value,
+        refleksyvumas: searchRefleksyvumas.value,
+        galune: searchGalune.value,
+        savarankiskumas: searchSavarankiskumas.value,
+        valdymas: searchValdymas.value,
+        reiksme: searchReiksme.value,
+        laipsnis: searchLaipsnis.value,
+        puslapis: searchPuslapis.value,
+        eilutes: searchEilute.value,
+        dalis: searchDalis.value,
+    }});
 }
 </script>
 <style scoped>

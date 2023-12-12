@@ -43,6 +43,7 @@ class kn_zodziai extends Model
         'galune_id',
     ];
     use HasFactory;
+    public $timestamps =false;
     public function savarankiskumas(): HasOne
     {
         return $this->hasOne(savarankiskumas::class, 'id', 'savarankiskumas');
@@ -206,22 +207,27 @@ class kn_zodziai extends Model
         // )
         if($request) {
             $word = $request->get('word');
+            $query->join('kn_tekstas_zodziais', 'kn_tekstas_zodziais.id', '=', 'kn_zodziai.kontekstas_zodziai_id');
+            $query->join('kn_leksemos', 'kn_leksemos.id', '=', 'kn_zodziai.pagr_formos_id');
+
             if($word && $word != '') {
+                error_log($word);
                 $query->whereRaw('LOWER(kn_zodziai.zodis) LIKE ?', '%'.$word.'%');
             }
             $lexeme = $request->get('lexeme');
             if($lexeme && $lexeme != '' && $lexeme != '0') {
-                error_log($lexeme);
+
                 $query->whereRaw('kn_zodziai.pagr_formos_id = ?', $lexeme);
             }
-            // $kalbos_dalis = $request->get('kalbos_dalis');
-            // if($kalbos_dalis && $kalbos_dalis != 0) {
-            //     $query->whereRaw('kn_zodziai.kalbos_dalis_id = ?', '%'.$kalbos_dalis.'%');
-            // } //lexeme
-            // $kilme = $request->get('kilme');
-            // if($word && $word != '') {
-            //     $query->whereRaw('kn_zodziai.kilme_id = ?', '%'.$kilme.'%');
-            // } //lexeme
+            $kalbos_dalis = $request->get('kalbos_dalis');
+            if($kalbos_dalis && $kalbos_dalis != 0) {
+                error_log($kalbos_dalis);
+                $query->whereRaw('kn_leksemos.kalbos_dalis_id = ?', '%'.$kalbos_dalis.'%');
+            }
+            $kilme = $request->get('kilme');
+            if($word && $word != '') {
+                $query->whereRaw('kn_leksemos.kilme_id = ?', '%'.$kilme.'%');
+            }
             $kamienas = $request->get('kamienas');
             if($kamienas && $kamienas != '' && $kamienas !='0') {
                 $query->whereRaw('kn_zodziai.kamienas_id = ?', $kamienas);
@@ -246,10 +252,17 @@ class kn_zodziai extends Model
             if($skaicius && $skaicius != '' && $skaicius != '0') {
                 $query->whereRaw('kn_zodziai.skaicius_id = ?', $skaicius);
             }
+            $puslapis = $request->get('puslapis');
+            if($puslapis && $puslapis != '' && $puslapis != '0') {
+                $query->whereRaw('kn_tekstas_zodziais.puslapis = ?', $puslapis);
+            }
         }
         //->whereRaw('LOWER(kn_zodziai.pagr_formos_id) LIKE ?', '%'."10000".'%');
-
-        $words = $query->paginate(15)->through(function ($word) {
+        $words = $query->select(['kn_zodziai.id', 'kn_zodziai.kontekstas_zodziai_id', 'kn_zodziai.zodis', 'kn_zodziai.kontekstas_eilute', 'kn_zodziai.pagr_formos_id', 
+        'kn_zodziai.reiksme', 'kn_zodziai.kaitymas_id', 'kn_zodziai.gimine_id', 'skaicius_id', 'linksnis_id', 'kn_zodziai.kamienas_id', 'kn_zodziai.laipsnis_id', 'kn_zodziai.apibreztumas_id',
+        'kn_zodziai.valdymas_id','kn_zodziai.veiksm_forma_id','kn_zodziai.refleksyvumas_id','kn_zodziai.rusis_id','kn_zodziai.nuosaka_id',
+        'kn_zodziai.laikas_id','kn_zodziai.sud_veiksm_formos_id','kn_zodziai.asmuo_id','kn_zodziai.pastabos',
+        'kn_zodziai.galune_id'])->orderBy('kn_zodziai.id')->paginate(15)->through(function ($word) {
             $mainWord = kn_tekstas_zodziais::select(['id','zodziai', 'nr'])->where('kn_tekstas_zodziais.id', '=', $word->kontekstas_zodziai_id)->first();
             $eilute1 = kn_tekstas_zodziais::select(['zodziai'])->where([
                 ['kn_tekstas_zodziais.nr', '>', $mainWord->nr-10],
@@ -288,6 +301,114 @@ class kn_zodziai extends Model
                 'asmuo_id' => $word->asmuo_id,
                 'pastabos' => $word->pastabos,
                 'galune_id' => $word->galune_id,
+            ];
+        });
+        return $words;
+    }
+    
+
+
+
+
+
+
+    public static function getWordsForPdf (Request $request = null) {
+        $query = self::query();
+        $query->join('kn_leksemos', 'kn_leksemos.id', '=', 'kn_zodziai.pagr_formos_id');
+        $query->join('kn_tekstas_eil', 'kn_tekstas_eil.id', '=', 'kn_zodziai.kontekstas_eilute');
+        $query->join('kamienai', 'kamienai.id', '=', 'kn_zodziai.kamienas_id');
+        if($request) {
+            $word = $request->get('word');
+            if($word && $word != '') {
+                $query->whereRaw('LOWER(kn_zodziai.zodis) LIKE ?', '%'.$word.'%');
+            }
+            $lexeme = $request->get('lexeme');
+            if($lexeme && $lexeme != '' && $lexeme != '0') {
+
+                $query->whereRaw('kn_zodziai.pagr_formos_id = ?', $lexeme);
+            }
+            $kalbos_dalis = $request->get('kalbos_dalis');
+            if($kalbos_dalis && $kalbos_dalis != 0) {
+                error_log($kalbos_dalis);
+                $query->whereRaw('kn_leksemos.kalbos_dalis_id = ?', '%'.$kalbos_dalis.'%');
+            }
+            $kilme = $request->get('kilme');
+            if($word && $word != '') {
+                $query->whereRaw('kn_leksemos.kilme_id = ?', '%'.$kilme.'%');
+            }
+            $kamienas = $request->get('kamienas');
+            if($kamienas && $kamienas != '' && $kamienas !='0') {
+                $query->whereRaw('kn_zodziai.kamienas_id = ?', $kamienas);
+            }
+            $gimine = $request->get('gimine');
+            if($gimine && $gimine != '' && $gimine != '0') {
+                $query->whereRaw('kn_zodziai.gimine_id = ?', $gimine);
+            }
+            $valdymas = $request->get('valdymas');
+            if($valdymas && $valdymas != '' && $valdymas != '') {
+                $query->whereRaw('kn_zodziai.valdymas_id = ?', $valdymas);
+            }
+            $laikas = $request->get('laikas');
+            if($laikas && $laikas != '' && $laikas != '') {
+                $query->whereRaw('kn_zodziai.laikas = ?', $laikas);
+            }
+            $asmuo = $request->get('galune');
+            if($asmuo && $asmuo != '' && $asmuo != '') {
+                $query->whereRaw('kn_zodziai.asmuo_id = ?', $asmuo);
+            }
+            $skaicius = $request->get('skaicius');
+            if($skaicius && $skaicius != '' && $skaicius != '0') {
+                $query->whereRaw('kn_zodziai.skaicius_id = ?', $skaicius);
+            }
+        }
+        //->whereRaw('LOWER(kn_zodziai.pagr_formos_id) LIKE ?', '%'."10000".'%');
+        $words = $query->select(['kn_zodziai.id', 'kn_zodziai.kontekstas_zodziai_id', 'kn_zodziai.zodis', 'kn_zodziai.kontekstas_eilute', 'kn_zodziai.pagr_formos_id', 
+        'kn_zodziai.reiksme', 'kn_zodziai.kaitymas_id', 'kn_zodziai.gimine_id', 'skaicius_id', 'linksnis_id', 'kn_zodziai.kamienas_id', 'kn_zodziai.laipsnis_id', 'kn_zodziai.apibreztumas_id',
+        'kn_zodziai.valdymas_id','kn_zodziai.veiksm_forma_id','kn_zodziai.refleksyvumas_id','kn_zodziai.rusis_id','kn_zodziai.nuosaka_id', 'kn_leksemos.kaitybos_tipas_id',
+        'kn_zodziai.laikas_id','kn_zodziai.sud_veiksm_formos_id','kn_zodziai.asmuo_id','kn_zodziai.pastabos',
+        'kn_zodziai.galune_id', 'kn_tekstas_eil.metrika', 'kn_tekstas_eil.puslapis', 'kn_tekstas_eil.eilute', 'kn_tekstas_eil.skyrius_id', 'kamienai.kamienas'])->orderBy('kn_zodziai.id')->limit(10)->get()->map(function ($word) {
+            $mainWord = kn_tekstas_zodziais::select(['id','zodziai', 'nr'])->where('kn_tekstas_zodziais.id', '=', $word->kontekstas_zodziai_id)->first();
+            $eilute1 = kn_tekstas_zodziais::select(['zodziai'])->where([
+                ['kn_tekstas_zodziais.nr', '>', $mainWord->nr-10],
+                ['kn_tekstas_zodziais.nr', '<', $mainWord->nr],
+                ])->limit(10)->get();
+            
+            $eilute2 = kn_tekstas_zodziais::select(['zodziai'])->where('kn_tekstas_zodziais.nr', '>', $mainWord->nr)->limit(10)->get();
+            $context = $eilute1->map(function ($item) {
+                return $item['zodziai'];
+            })->join(' ').'¶'.$mainWord['zodziai'].$eilute2->map(function ($item) {
+                return $item['zodziai'];
+            })->join(' ');
+            return [
+                'id' => $word->id,
+                'zodis' => $word->zodis,
+                'kontekstas_eilute' =>  $context,
+                'pagr_formos_id' => $word->pagr_formos_id,
+                'kontekstas_zodziai_id' => $word->kontekstas_zodziai_id,
+                'lizdas' => $word->pagr_forma,
+                'pagrForma' => $word->pagr_formos_id,
+                'kaitymas_id' => $word->kaitymas_id,
+                'reiksme' => $word->reiksme,
+                'gimine_id' => $word->gimine_id,
+                'skaicius_id' => $word->skaicius_id,
+                'linksnis_id' => $word->linksnis_id,
+                'kamienas_id' => $word->kamienas_id,
+                'laipsnis_id' => $word->laipsnis_id,
+                'apibreztumas_id' => $word->apibreztumas_id,
+                'valdymas_id' => $word->valdymas_id,
+                'veiksm_forma_id' => $word->veiksm_forma_id,
+                'refleksyvumas_id' => $word->refleksyvumas_id,
+                'kaitybos_tipas_id' => $word->kaitybos_tipas_id,
+                'rusis_id' => $word->rusis_id,
+                'nuosaka_id' => $word->nuosaka_id,
+                'laikas_id' => $word->laikas_id,
+                'sud_veiksm_formos_id' => $word->sud_veiksm_formos_id,
+                'asmuo_id' => $word->asmuo_id,
+                'pastabos' => $word->pastabos,
+                'galune_id' => $word->galune_id,
+                'metrikos' => $word->metrika.', '.$word->puslapis.', '.$word->eilute,
+                'skyrius' => $word->skyrius_id,
+                'kamienas' => $word->kamienas
             ];
         });
         return $words;

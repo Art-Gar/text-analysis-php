@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Inertia\Inertia;
 use Inertia\Response;
+use Barryvdh\DomPDF\Facade\Pdf;
 class WordController extends Controller
 {
     public function getAll(Request $request): Response {
@@ -33,6 +34,35 @@ class WordController extends Controller
         }
     }
 
+    public function getWordPdf(Request $request) {
+        {
+            $data = [
+                'words' => kn_zodziai::getWordsForPdf($request),
+            ];
+            $pdf = Pdf::loadView('word_pdf', $data);
+            return $pdf->download('Ataskaita.pdf');
+        }
+    }
+
+
+    public function updateWord(Request $request, string $id) {
+        {
+            $valid = request()->validate([
+                'gimine_id' => 'required|integer',
+                'veiksmForma' => 'required|integer',
+            ]);
+            $gimine = $valid['gimine_id'];
+            $veiksmForma = $valid['veiksmForma'];
+            kn_zodziai::where('id', $id)->update(['gimine_id' => $gimine]);
+            $word = kn_zodziai::where('id', $id)->update([
+                'gimine_id' => $gimine,
+                'galune_id' => $gimine,
+                'veiksm_forma_id' => $veiksmForma,
+                'gimine_id' => $gimine
+            ]);
+            return response()->noContent(200);
+        }
+    }
     public function getKaityba(Request $request): Response {
         {
                 return inertia('Kaityba/Index', [

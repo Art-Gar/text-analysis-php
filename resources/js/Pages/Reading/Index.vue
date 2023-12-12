@@ -60,9 +60,9 @@ const props = defineProps({
 
                         <input type="number" min="1" name="puslapis" value="" placeholder="puslapio numeris"><br>
 
-                        <input type="submit" class="p-6 text-gray-900 text-xs" value="search" />
+                        <input type="submit" class="p-6 text-gray-900 text-xs bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"  value="ieškoti" />
                     </form>
-                    <button @click="isOpen = false"> close</button>
+                    <button @click="isOpen = false"> uždaryti</button>
 
                 </Modal>
 

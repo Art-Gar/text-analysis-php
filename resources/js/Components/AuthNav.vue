@@ -37,19 +37,19 @@ const showingNavigationDropdown = ref(false);
                                          Dashboard
                                      </NavLink>
                                     -->
-                        <NavLink v-if="userHasPermissions($page.props.auth.user.permissions, RBAC.EditUsers)"
+                        <NavLink v-if="$page.props.auth?.user && userHasPermissions($page.props.auth.user.permissions, RBAC.EditUsers)"
                             :href="route('users')" :active="route().current('users')">
                             Vartotojai
                         </NavLink>
-                        <NavLink v-if="userHasPermissions($page.props.auth.user.permissions, RBAC.EditLeksika)"
+                        <NavLink v-if="$page.props.auth?.user && userHasPermissions($page.props.auth.user.permissions, RBAC.EditLeksika)"
                             :href="route('lexemes')" :active="route().current('lexemes')">
                             Leksemos
                         </NavLink>
-                        <NavLink v-if="userHasPermissions($page.props.auth.user.permissions, RBAC.EditLeksika)"
+                        <NavLink v-if="$page.props.auth?.user && userHasPermissions($page.props.auth.user.permissions, RBAC.EditLeksika)"
                             :href="route('words')" :active="route().current('words')">
                             Žodžiai
                         </NavLink>
-                        <NavLink v-if="$page.props.auth.user.permissions, RBAC.EditLeksika" :href="route('words')"
+                        <NavLink v-if="$page.props.auth?.user.permissions, RBAC.EditLeksika" :href="route('words')"
                             :active="route().current('words')">
                             Kaityba
                         </NavLink>

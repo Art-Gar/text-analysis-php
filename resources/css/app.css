@@ -14,12 +14,6 @@
         font-weight: 500;
         src: url('../assets/fonts/Palem3.2.05-it.ttf') format("truetype");
       }
-      @font-face {
-        font-family: 'Comic Sans MS';
-        font-weight: normal;
-        font-style: normal;
-        src: url('../assets/fonts/ComicSansMS.woff');
-      }
 }
 @layer components {
     .text-palem {

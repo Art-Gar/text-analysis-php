@@ -74,8 +74,6 @@
 <script setup>
 import Pagination from '@/Shared/Pagination.vue'
 import { onMounted, onBeforeMount, ref } from 'vue';
-import { router } from '@inertiajs/vue3'
-import axios from 'axios';
 const props = defineProps({
   words: Object,
 })

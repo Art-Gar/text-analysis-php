@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
-
+use Barryvdh\DomPDF\ServiceProvider as BarryServiceProvider;
+use Barryvdh\DomPDF\PDF as BarryFacade;
 return [
 
     /*
@@ -168,6 +169,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        BarryServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -184,6 +186,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'RBAC' => App\Helpers\RBAC::class,
+        'PDF' => Barryvdh\DomPDF\PDF::class,
     ])->toArray(),
 
 ];

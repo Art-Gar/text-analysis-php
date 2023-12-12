@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 enum RBAC: int
 {
-    case Admin =                0x70000000;
+    case Admin =                0x40000000;
     case None =                 0x00000001;
     case EditPagrForms =        0x00000002;
     case EditKaitymas =         0x00000004;
