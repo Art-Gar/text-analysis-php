@@ -43,9 +43,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth','verified'])->group(function () {
     Route::get('/lexemes', [LexemeController::class, 'getAll'])->name('lexemes')->can('Admin');
     Route::get('/words', [WordController::class, 'getAll'])->name('words')->can('Admin');
-    Route::get('/reading', [ReadingController::class, 'getAll'])->name('reading');
-    Route::get('/kaityba', [WordController::class, 'getKaityba'])->name('kaityba');
 });
+Route::get('/kaityba', [WordController::class, 'getKaityba'])->name('kaityba');
+Route::get('/reading', [ReadingController::class, 'getAll'])->name('reading');
 Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->middleware('auth')->name('users');
 
 
