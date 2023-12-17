@@ -211,7 +211,6 @@ class kn_zodziai extends Model
             $query->join('kn_leksemos', 'kn_leksemos.id', '=', 'kn_zodziai.pagr_formos_id');
 
             if($word && $word != '') {
-                error_log($word);
                 $query->whereRaw('LOWER(kn_zodziai.zodis) LIKE ?', '%'.$word.'%');
             }
             $lexeme = $request->get('lexeme');
@@ -221,7 +220,6 @@ class kn_zodziai extends Model
             }
             $kalbos_dalis = $request->get('kalbos_dalis');
             if($kalbos_dalis && $kalbos_dalis != 0) {
-                error_log($kalbos_dalis);
                 $query->whereRaw('kn_leksemos.kalbos_dalis_id = ?', '%'.$kalbos_dalis.'%');
             }
             $kilme = $request->get('kilme');
@@ -244,9 +242,13 @@ class kn_zodziai extends Model
             if($laikas && $laikas != '' && $laikas != '') {
                 $query->whereRaw('kn_zodziai.laikas = ?', $laikas);
             }
-            $asmuo = $request->get('galune');
+            $asmuo = $request->get('asmuo');
             if($asmuo && $asmuo != '' && $asmuo != '') {
                 $query->whereRaw('kn_zodziai.asmuo_id = ?', $asmuo);
+            }
+            $asmuo = $request->get('galuhe');
+            if($asmuo && $asmuo != '' && $asmuo != '') {
+                $query->whereRaw('kn_zodziai.galune_id = ?', $asmuo);
             }
             $skaicius = $request->get('skaicius');
             if($skaicius && $skaicius != '' && $skaicius != '0') {
@@ -329,7 +331,6 @@ class kn_zodziai extends Model
             }
             $kalbos_dalis = $request->get('kalbos_dalis');
             if($kalbos_dalis && $kalbos_dalis != 0) {
-                error_log($kalbos_dalis);
                 $query->whereRaw('kn_leksemos.kalbos_dalis_id = ?', '%'.$kalbos_dalis.'%');
             }
             $kilme = $request->get('kilme');

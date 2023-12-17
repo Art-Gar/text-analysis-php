@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\kn_zodziai;
 use App\Models\laiko_kategorija;
 use App\Models\laipsnio_kategorija;
+use App\Models\nuosaka;
 use App\Models\refleksyvumas;
 use App\Models\rusis;
 use App\Models\savarankiskumas;
@@ -49,16 +50,38 @@ class WordController extends Controller
         {
             $valid = request()->validate([
                 'gimine_id' => 'required|integer',
-                'veiksmForma' => 'required|integer',
+                'skaicius_id' => 'required|integer',
+                'linksnis_id' => 'required|integer',
+                'kamienas_id' => 'required|integer',
+                'laipsnis_id' => 'required|integer',
+                'apibreztumas_id' => 'required|integer',
+                'veiksm_forma_id' => 'required|integer',
+                'nuosaka_id' => 'required|integer',
+                'valdymas_id' => 'required|integer',
+                'refleksyvumas_id' => 'required|integer',
+                'rusis_id' => 'required|integer',
+                'laikas_id' => 'required|integer',
+                'nuosaka_id' => 'required|integer',
+                'reiksme' => 'required|string',
+                'galune_id' => 'required|integer',
+
             ]);
-            $gimine = $valid['gimine_id'];
-            $veiksmForma = $valid['veiksmForma'];
-            kn_zodziai::where('id', $id)->update(['gimine_id' => $gimine]);
             $word = kn_zodziai::where('id', $id)->update([
-                'gimine_id' => $gimine,
-                'galune_id' => $gimine,
-                'veiksm_forma_id' => $veiksmForma,
-                'gimine_id' => $gimine
+                'gimine_id' => $valid['gimine_id'],
+                'skaicius_id' => $valid['skaicius_id'],
+                'linksnis_id' => $valid['linksnis_id'],
+                'kamienas_id' => $valid['kamienas_id'],
+                'laipsnis_id' => $valid['laipsnis_id'],
+                'apibreztumas_id' => $valid['apibreztumas_id'],
+                'veiksm_forma_id' => $valid['veiksm_forma_id'],
+                'nuosaka_id' => $valid['nuosaka_id'],
+                'valdymas_id' => $valid['valdymas_id'],
+                'refleksyvumas_id' => $valid['refleksyvumas_id'],
+                'rusis_id' => $valid['rusis_id'],
+                'laikas_id' => $valid['laikas_id'],
+                'nuosaka_id' => $valid['nuosaka_id'],
+                'reiksme' => $valid['reiksme'],
+                'galune_id' => $valid['galune_id'],
             ]);
             return response()->noContent(200);
         }
@@ -66,7 +89,7 @@ class WordController extends Controller
     public function getKaityba(Request $request): Response {
         {
                 return inertia('Kaityba/Index', [
-                    'words' => fn () =>kn_zodziai::getWordsFormatted($request),
+                    'words' => fn () => kn_zodziai::getWordsFormatted($request),
                     'lexemes' => kn_leksemos::select(['id', 'pagr_formos'])->get(),
                     'kalbos_dalys' => kalbos_dalis::select(['id', 'kalbos_dalis'])->get(),
                     'kamienai' => kamienai::select(['id','kamienas'])->get(),

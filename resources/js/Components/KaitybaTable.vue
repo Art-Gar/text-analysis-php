@@ -171,7 +171,7 @@
 import Pagination from '@/Shared/Pagination.vue'
 import Modal from '@/Components/Modal.vue';
 
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, reactive } from 'vue';
 import axios from 'axios';
 const props = defineProps({
   words: Object,
@@ -194,25 +194,10 @@ const props = defineProps({
 })
 const emit = defineEmits(['reload']);
 const wordOpen = ref(false);
-function openWord(word) {
-  currentWord = word;
-  nextTick(() => { wordOpen.value=true;})
-  
-}
-function closeWord() {
-  wordOpen.value=false;
-}
-async function updateWord() {
-  await axios.patch(`http://localhost:8000/api/words/${currentWord.id}`, { ...currentWord }, { withCredentials: true, withDefaults: true });
-  closeWord();
-  emit('reload')
-}
-let currentWord = {
+const currentWord = reactive({
   id: 0,
   zodis: '',
   pagr_formos_id: 0,
-  lizdas: '',
-  kaitybos_tipas_id: 0,
   gimine_id: 0,
   skaicius_id: 0,
   linksnis_id: 0,
@@ -228,5 +213,37 @@ let currentWord = {
   reiksme: '',
   galune_id: 0,
   kontekstas_eilute: 0,
-};
+});
+function openWord(word) {
+  // currentWord = word;
+  currentWord.id = word.id;
+  currentWord.zodis = word.zodis;
+  currentWord.pagr_formos_id = word.pagr_formos_id;
+  currentWord.gimine_id = word.gimine_id;
+  currentWord.skaicius_id = word.skaicius_id;
+  currentWord.linksnis_id = word.linksnis_id;
+  currentWord.kamienas_id = word.kamienas_id;
+  currentWord.laipsnis_id = word.laipsnis_id;
+  currentWord.apibreztumas_id = word.apibreztumas_id;
+  currentWord.veiksm_forma_id = word.veiksm_forma_id;
+  currentWord.valdymas_id = word.valdymas_id;
+  currentWord.refleksyvumas_id = word.refleksyvumas_id;
+  currentWord.rusis_id = word.rusis_id;
+  currentWord.laikas_id = word.laikas_id;
+  currentWord.nuosaka_id = word.nuosaka_id;
+  currentWord.reiksme = word.reiksme;
+  currentWord.galune_id = word.galune_id;
+  currentWord.kontekstas_eilute = word.kontekstas_eilute;
+  console.log(currentWord);
+  nextTick(() => { wordOpen.value=true;})
+  
+}
+function closeWord() {
+  wordOpen.value=false;
+}
+async function updateWord() {
+  await axios.patch(`http://localhost:8000/api/words/${currentWord.id}`, { ...currentWord }, { withCredentials: true, withDefaults: true });
+  closeWord();
+  emit('reload')
+}
 </script>
