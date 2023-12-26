@@ -242,7 +242,7 @@ function closeWord() {
   wordOpen.value=false;
 }
 async function updateWord() {
-  await axios.patch(`http://localhost:8000/api/words/${currentWord.id}`, { ...currentWord }, { withCredentials: true, withDefaults: true });
+  await axios.patch(`http://localhost:8000/api/words/${currentWord.id}`, { ...currentWord }, { withDefaults: true });
   closeWord();
   emit('reload')
 }
