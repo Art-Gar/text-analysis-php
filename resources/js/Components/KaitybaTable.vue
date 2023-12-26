@@ -170,8 +170,8 @@
 <script setup>
 import Pagination from '@/Shared/Pagination.vue'
 import Modal from '@/Components/Modal.vue';
-
 import { ref, nextTick, reactive } from 'vue';
+import { usePage } from "@inertiajs/vue3";
 import axios from 'axios';
 const props = defineProps({
   words: Object,
@@ -242,7 +242,7 @@ function closeWord() {
   wordOpen.value=false;
 }
 async function updateWord() {
-  await axios.patch(`http://localhost:8000/api/words/${currentWord.id}`, { ...currentWord }, { withDefaults: true });
+  await axios.patch(`${usePage().props.defaultUrl}/api/words/${currentWord.id}`, { ...currentWord }, { withCredentials: true, withDefaults: true });
   closeWord();
   emit('reload')
 }
