@@ -1,5 +1,5 @@
 <template>
         <img
-            src="images/ku.png"
+            src="images/knyga-nobaznystes.jpg"
         />
 </template>
