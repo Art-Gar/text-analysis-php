@@ -42,7 +42,7 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
-            'defaultUrl' => env('DEFAULT_URL', 'http://localhost:8000'),
+            'defaultUrl' => env('DEFAULT_URL', 'http://134.122.86.184/'),
         ];
     }
 }
